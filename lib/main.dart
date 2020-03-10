@@ -32,10 +32,16 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Widget> _children = [Home(), First(), Second()];
 
   void _onTap(int index) {
+    pageController.jumpToPage(index);
+  }
+
+  void onPageChanged(int index) {
     setState(() {
       _currentIndex = index;
     });
   }
+
+  final pageController = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +49,12 @@ class _MyHomePageState extends State<MyHomePage> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body: _children[_currentIndex],
+        body: PageView(
+          controller: pageController,
+          onPageChanged: onPageChanged,
+          children: _children,
+          physics: NeverScrollableScrollPhysics(), // No sliding
+        ),
         bottomNavigationBar: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
             onTap: _onTap,
@@ -59,6 +70,8 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               new BottomNavigationBarItem(
                   icon: Icon(Icons.person), title: Text('Second'))
-            ]));
+            ]
+        )
+    );
   }
 }
